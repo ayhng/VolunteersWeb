@@ -1,0 +1,4 @@
+/* put more space between check box labels */
+.checkbox label {
+  margin-right: 20px;
+}
