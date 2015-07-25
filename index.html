@@ -117,29 +117,25 @@
 
         </div>
         
-        <div class="col-md-4">
+        <div class="col-md-8">
 
-          <table id="tblSearchResults">
-            <tr>
-              <th>Id</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-            </tr>
+          <table id="tblSearchResults" class="table table-condensed table-hover table-striped">
+              <thead>
+                  <tr>
+                      <th data-column-id="colId" data-type="numeric">ID</th>
+                      <th data-column-id="colFirstName" data-type="string" data-order="asc">First Name</th>
+                      <th data-column-id="colLastName" data-type="string">Last Name</th>
+                  </tr>
+              </thead>
+              <tbody>
+              </tbody>
           </table>
 
        </div>
-        
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-      </div>
 
       <hr>
 
       <footer>
-        <p>&copy; Company 2014</p>
       </footer>
     </div> <!-- /container -->
 
@@ -153,28 +149,43 @@
     <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
 
     <!-- Custom files -->
+    <script src="libs/jquery.bootgrid-1.2.0/jquery.bootgrid.js"></script>
     <script src="js/string-format.js"></script>
     <script src="js/volunteer.js"></script>
 
     <script>
 
+      var tblResults = $('#tblSearchResults');
+      
+      $( document ).ready(function() {
+        tblResults.bootgrid({
+          'navigation' : 0,
+          'labels': {
+            noResults : "Click Search Now button"
+          }
+        });
+      });
+
       var funcProcessor = function GenerateResultTable(data)
       {
-        var tblResults = $('#tblSearchResults');
-
-        // Using JQuery to add row to table
-        var rowTemplate = "<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>";
-
         // Clear out the table first
-        tblResults.find('tr').first().siblings().remove();
+        tblResults.bootgrid("clear");
 
         if (data)
         {
           data.forEach(function(item)
           {
-            var newRow = $(String.format(rowTemplate, item.Id, item.FirstName, item.LastName));
-            tblResults.append(newRow);
+            tblResults.bootgrid("append",
+              [
+                {
+                  colId: item.Id,
+                  colFirstName: item.FirstName,
+                  colLastName: item.LastName
+                }
+              ])
           });
+
+          tblResults.bootgrid("sort", { colId: "asc" });
         }
       }
 
